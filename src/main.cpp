@@ -224,6 +224,11 @@ void activateWeatherPicto(String picto) {
   uint16_t index = getWeatherPictoIndex(picto);
   uint32_t color = -1;
 
+  if (brightness == 0) {
+    weatherPixels.clear();
+    weatherPixels.show();
+  }
+
   Serial.print("Picto : ");
   Serial.println(picto);
 
@@ -277,6 +282,13 @@ void activateWeatherPicto(String picto) {
 void showTemperatureGradient(int temperature)
 {
   // Generated with https://cssgradient.io
+
+  if (brightness == 0) {
+    temperaturePixels.clear();
+    temperaturePixels.show();
+
+    return;
+  }
 
   if (temperature < 5) {
     temperaturePixels.setPixelColor(5, temperaturePixels.Color(0, 255, 255));
@@ -349,29 +361,31 @@ void showTemperature(int temperature) {
 void weatherLoadingAnim() {
   Serial.println("Animation...");
 
-  // Sun
-  activateWeatherPicto("sun");
-  delay(1000);
+  if (brightness > 0) {
+    // Sun
+    activateWeatherPicto("sun");
+    delay(1000);
 
-  // Sun & Cloud
-  activateWeatherPicto("sun_cloud");
-  delay(1000);
+    // Sun & Cloud
+    activateWeatherPicto("sun_cloud");
+    delay(1000);
 
-  // Cound
-  activateWeatherPicto("cloud");
-  delay(1000);
+    // Cound
+    activateWeatherPicto("cloud");
+    delay(1000);
 
-  // Rain
-  activateWeatherPicto("rain");
-  delay(1000);
+    // Rain
+    activateWeatherPicto("rain");
+    delay(1000);
 
-  // Thunder
-  activateWeatherPicto("thunder");
-  delay(1000);
+    // Thunder
+    activateWeatherPicto("thunder");
+    delay(1000);
 
-  // Snow
-  activateWeatherPicto("snow");
-  delay(1000);
+    // Snow
+    activateWeatherPicto("snow");
+    delay(1000);
+  }
 
   weatherPixels.clear();
   weatherPixels.show();
@@ -625,13 +639,16 @@ void loop()
           weatherPixels.clear();
           weatherPixels.show();
 
-          getWeather(false);
+          getWeather(true);
           STATE = IS_SHOWING_CURRENT_WEATHER;
         }
         else {
           Serial.println("Long press : Changing to Lamp Mode");
           char temperatureStringTemp[5] = {' ', ' ', ' ', ' '};
           sevseg.setChars(temperatureStringTemp);
+
+          // Set by default brightness to 66%
+          brightness = 66;
 
           STATE = IS_LAMP_MODE;
         }
@@ -667,6 +684,23 @@ void loop()
           activateWeatherPicto(getWeatherPictoFromCondition(currentCondition));
           showTemperatureGradient(currentTemperature);
         }
+        // Lamp Mode
+        else if (LAST_STATE == IS_LAMP_MODE) {
+          if (brightness >= 100) {
+            brightness = 0;
+          } else if (brightness == 0) {
+            brightness = 33;
+          } else if (brightness == 33) {
+            brightness = 66;
+          } else {
+            brightness = 100;
+          }
+
+          weatherPixels.setBrightness(brightness);
+          temperaturePixels.setBrightness(brightness);
+
+          STATE = IS_LAMP_MODE;
+        }
       }
       break;
 
@@ -677,21 +711,33 @@ void loop()
             STATE = IS_TOUCHING_BUTTON;
           }
 
-          temperaturePixels.setPixelColor(0, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.setPixelColor(1, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.setPixelColor(2, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.setPixelColor(3, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.setPixelColor(4, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.setPixelColor(5, temperaturePixels.Color(255, 255, 255));
-          temperaturePixels.show();
+          if (brightness > 0) {
+            temperaturePixels.setPixelColor(0, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.setPixelColor(1, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.setPixelColor(2, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.setPixelColor(3, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.setPixelColor(4, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.setPixelColor(5, temperaturePixels.Color(255, 255, 255));
+            temperaturePixels.show();
 
-          weatherPixels.setPixelColor(0, weatherPixels.Color(255, 255, 255));
-          weatherPixels.setPixelColor(1, weatherPixels.Color(255, 255, 255));
-          weatherPixels.setPixelColor(2, weatherPixels.Color(255, 255, 255));
-          weatherPixels.setPixelColor(3, weatherPixels.Color(255, 255, 255));
-          weatherPixels.setPixelColor(4, weatherPixels.Color(255, 255, 255));
-          weatherPixels.setPixelColor(5, weatherPixels.Color(255, 255, 255));
-          weatherPixels.show();
+            weatherPixels.setPixelColor(0, weatherPixels.Color(255, 255, 255));
+            weatherPixels.setPixelColor(1, weatherPixels.Color(255, 255, 255));
+            weatherPixels.setPixelColor(2, weatherPixels.Color(255, 255, 255));
+            weatherPixels.setPixelColor(3, weatherPixels.Color(255, 255, 255));
+            weatherPixels.setPixelColor(4, weatherPixels.Color(255, 255, 255));
+            weatherPixels.setPixelColor(5, weatherPixels.Color(255, 255, 255));
+            weatherPixels.show();
+          }
+          else {
+            temperaturePixels.clear();
+            temperaturePixels.show();
+
+            weatherPixels.clear();
+            weatherPixels.show();
+          }
+
+          delay(50);
+
         break;
   }
 }
