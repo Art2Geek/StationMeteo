@@ -115,6 +115,8 @@ String getWeatherPicto(String condition)
   if (
     condition == "Ensoleillé" ||
     condition == "Nuit claire" ||
+    condition == "Faibles passages nuageux" ||
+    condition == "Nuit légèrement voilée" ||
     condition == "Nuit bien dégagée"
   ) {
     picto = "sun";
@@ -122,8 +124,6 @@ String getWeatherPicto(String condition)
   // SUN AND CLOUD
   else if (
     condition == "Ciel voilé" ||
-    condition == "Nuit légèrement voilée" ||
-    condition == "Faibles passages nuageux" ||
     condition == "Nuit claire et stratus" ||
     condition == "Eclaircies"
   ) {
