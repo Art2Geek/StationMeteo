@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station Météo - Configuration</title>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">Station Météo - Configuration</span>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" action="saveConfig" class="p-5" onsubmit="saveConfig(event)">
+                    <div class="form-group">
+                        <label for="city">Ville</label>
+                        <input type="text" class="form-control" id="city" name="city" aria-describedby="cityHelp">
+                        <small id="cityHelp" class="form-text text-muted">Entrez ici le nom de la ville pour laquelle vous souhaitez récupérer la météo.</small>
+                    </div>
+
+                    <div class="text-center p-3">
+                        <button type="submit" class="btn btn-success">Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
