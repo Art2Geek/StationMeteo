@@ -25,6 +25,8 @@ char temperatureString[5] = {' ', ' ', ' ', ' '};
 char displayDay1String[5] = {' ', 'J', '1', ' '};
 char displayDay2String[5] = {' ', 'J', '2', ' '};
 
+byte hardwareConfig = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
+
 // NeoPixel
 #include <Adafruit_NeoPixel.h>
 #define WEATHER_PIN 22     // input pin Neopixel is attached to
@@ -484,7 +486,6 @@ void _config7Segments()
   byte digitPins[] = {26, 27, 14, 12};
   byte segmentPins[] = {0, 4, 16, 17, 5, 18, 19, 21};
   bool resistorsOnSegments = false; // 'false' means resistors are on digit pins
-  byte hardwareConfig = COMMON_CATHODE; // See README.md for options
   bool updateWithDelays = false; // Default 'false' is Recommended
   bool leadingZeros = false; // Use 'true' if you'd like to keep the leading zeros
   bool disableDecPoint = false; // Use 'true' if your decimal point doesn't exist or isn't connected
