@@ -116,6 +116,7 @@ String getWeatherPicto(String condition)
   // SUN
   if (
     condition == "Ensoleillé" ||
+    condition == "Eclaircies" ||
     condition == "Nuit claire" ||
     condition == "Faibles passages nuageux" ||
     condition == "Nuit légèrement voilée" ||
@@ -126,8 +127,7 @@ String getWeatherPicto(String condition)
   // SUN AND CLOUD
   else if (
     condition == "Ciel voilé" ||
-    condition == "Nuit claire et stratus" ||
-    condition == "Eclaircies"
+    condition == "Nuit claire et stratus"
   ) {
     picto = "sun_cloud";
   }
@@ -210,9 +210,7 @@ int getWeatherPictoIndex(String picto)
 
 String getWeatherPictoFromCondition(String condition)
 {
-  String picto = getWeatherPicto(condition);
-
-  return getWeatherPicto(picto);
+  return getWeatherPicto(condition);
 }
 
 int getWeatherPictoIndexFromCondition(String condition)
@@ -366,27 +364,27 @@ void weatherLoadingAnim() {
   if (brightness > 0) {
     // Sun
     activateWeatherPicto("sun");
-    delay(1000);
+    delay(800);
 
     // Sun & Cloud
     activateWeatherPicto("sun_cloud");
-    delay(1000);
+    delay(800);
 
     // Cound
     activateWeatherPicto("cloud");
-    delay(1000);
+    delay(800);
 
     // Rain
     activateWeatherPicto("rain");
-    delay(1000);
+    delay(800);
 
     // Thunder
     activateWeatherPicto("thunder");
-    delay(1000);
+    delay(800);
 
     // Snow
     activateWeatherPicto("snow");
-    delay(1000);
+    delay(800);
   }
 
   weatherPixels.clear();
@@ -575,7 +573,7 @@ void loop()
         STATE = IS_TOUCHING_BUTTON;
       }
 
-      if (currentMillis - previousMillis >= 600000) {
+      if (currentMillis - previousMillis >= 1000 * 60 * 30) { // Each 30 minutes
         previousMillis = currentMillis;
 
         getWeather(true);
